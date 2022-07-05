@@ -1,0 +1,148 @@
+.example-container {
+  width: 250px;
+  max-width: 100%;
+  margin: 0 15px 15px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.example-list {
+  border: solid 1px #ccc;
+  min-height: 60px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+}
+
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+  border: none;
+}
+
+.cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  .cdk-drag:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 7.5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #7db2e1; 
+  border-radius: 7.5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7db2e1; 
+}
+
+.cdk-drag-placeholder {
+  .issue-wrap {
+    background-color: rgba(150, 150, 200, 0.1);
+    border: 1px dashed #abc;
+    margin: 5px;
+
+    .issue {
+      opacity: 0;
+    }
+  }
+}
+
+.cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  .cdk-drag:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+
+.d-card{
+  background-color: #92d050;
+  color: #ffffff;
+}
+
+.op-card{
+  background-color: #ffc000;
+  color: #ffffff;
+}
+
+.mp-card{
+  background-color: #7f7f7f;
+  color: #ffffff;
+}
+
+.mc-card{
+  background-color: #ff3300;
+  color: #ffffff;
+}
+
+.sby-card{
+  background-color: #cccccc;
+  color: #000000;
+}
+
+.snack-bar{
+  z-index: 99
+}
+
+::ng-deep .mat-menu-content {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+::ng-deep .mat-menu-content .mat-menu-content {
+  width: 250px !important; // as you wish
+  height: 200px !important; // as you wish 
+}
+
+.mat-menu-item{
+  line-height:35px;
+  height:35px;
+}
+
+.hoverMP:hover {
+  color: white;
+  background-color: #c0c0c079;
+  height: 300px;
+  .lead{
+    color: white;
+  }
+}
+
+
+.hoverMC:hover{
+  color: black;
+  background-color: #ff3300be;  
+  height: 300px;
+  .lead{
+    color: black;
+  }
+}

@@ -1,0 +1,834 @@
+<!--
+[ngClass]="globalService.getActiveTab() == 'tickets' ? 'active' : 'inactive'"
+-->
+<div class="w-100">
+
+    <div class="p-2">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div style="color: #7db2e1" class="display-5 lead">Pizarron</div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 d-flex flex-row-reverse">
+                    <!--<h3># Unidades totales: {{monterreyUnits.length + guadalajaraUnits.length + mexicoUnits.length +
+                        hermosilloUnits.length + lapazUnits.length + culiacanUnits.length}}</h3>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-2"></div>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 p-2" *ngIf="culiacanUnits != undefined">
+            <div class="card bg-light text-dark p-2" style="height: auto;">
+                <div>
+                    <div class="lead">Unidades Disponibles: {{monterreyUnits.length + guadalajaraUnits.length + mexicoUnits.length +
+                        hermosilloUnits.length + lapazUnits.length + culiacanUnits.length}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 p-2" *ngIf="unitsInOperation != undefined">
+            <div class="card bg-light text-dark p-2" style="height: auto;">
+                <div class="lead">
+                    Unidades en Operaciones: {{unitsInOperation.filteredData.length}}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 p-2" *ngIf="unitsInMaintenance != undefined">
+            <div class="card bg-light text-dark p-2" style="height: auto;">
+                <div class="lead">
+                    Unidades en Mantenimiento: {{unitsInMaintenance.filteredData.length}}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+
+
+    <div style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;"></div>
+
+    <div class="m-2"></div>
+
+    <mat-tab-group mat-align-tabs="end" [animationDuration]="1000" class="p-1">
+        <mat-tab label="Disponibles">
+
+            <!--<div class="d-flex flex-row-reverse">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 p-4">
+                    <div cdkDropList [cdkDropListData]="mantenimientoPreventivo" class=" hoverMP"
+                    (cdkDropListDropped)="drop($event)" style="min-height: 50px;border-style: dashed; background-color: #97979788;" >
+                
+                        <div class="lead text-center text-dark">Mantenimiento Preventivo</div>
+                
+                    </div>
+                </div>
+        
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 p-4">
+                    <div cdkDropList [cdkDropListData]="mantenimientoCorrectivo" class="hoverMC"
+                    (cdkDropListDropped)="drop($event)" style="min-height: 50px;border-style: dashed;border-color: red;" >
+                
+                        <div class="lead text-center text-white">Mantenimiento Correctivo</div>
+                
+                    </div>
+                </div>
+            </div>-->
+            
+
+            <div class="row p-2" style="margin-top: 15px;color: #7db2e1;">
+                <div class="display-6">Unidades Disponibles</div>
+            </div>
+
+            <div cdkDropListGroup class="row">
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">Monterrey</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="monterreyDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{monterreyDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <div class="form-group">
+
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #monterreyFilter (keyup)="doMonterreyFilter(monterreyFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="monterreyDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="monterreyDeployUnits != undefined">
+
+                            <div *ngFor="let unit of monterreyDeployUnits.filteredData" cdkDrag
+                                [cdkDragStartDelay]="200" [ngClass]="
+                                unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                                unit.status == 'SA' ? 'card m-2' :
+                                unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'">
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                        
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                        
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="monterreyDatePicker" #monterreyDateValue>
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="monterreyDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #monterreyDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                        
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,monterreyDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,monterreyDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </div>
+
+                            </div>
+                            <div *ngIf="!(monterreyDeployUnits.filteredData.length > 0)" class="p-2">
+                                No hay unidades
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">Guadalajara</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="guadalajaraDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{guadalajaraDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #guadalajaraFilter (keyup)="doGuadalajaraFilter(guadalajaraFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="guadalajaraDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="guadalajaraDeployUnits != undefined">
+
+                            <div [ngClass]="
+                            unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                            unit.status == 'SA' ? 'card m-2' :
+                            unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'"
+                                *ngFor="let unit of guadalajaraDeployUnits.filteredData" cdkDrag
+                                [cdkDragStartDelay]="200">
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                        
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="guadalajaraDatePicker" #guadalajaraDateValue >
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="guadalajaraDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #guadalajaraDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,guadalajaraDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,guadalajaraDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                </div>
+                            </div>
+
+                            <div *ngIf="!(guadalajaraDeployUnits.filteredData.length > 0)" class="p-2">
+                                No hay unidades
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">México</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="mexicoDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{mexicoDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #mexicoFilter (keyup)="doMexicoFilter(mexicoFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="mexicoDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="mexicoDeployUnits != undefined">
+
+                            <div [ngClass]="
+                            unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                            unit.status == 'SA' ? 'card m-2' :
+                            unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'"
+                                *ngFor="let unit of mexicoDeployUnits.filteredData" cdkDrag [cdkDragStartDelay]="200">
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                              <span>Disable alerts</span>
+                                                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="mexicoDatePicker" #mexicoDateValue >
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="mexicoDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #mexicoDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,mexicoDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,mexicoDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </div>
+                            </div>
+
+                            <div *ngIf="!(mexicoDeployUnits.filteredData.length > 0)" class="p-2">
+                                No hay unidades
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">Hermosillo</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="hermosilloDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{hermosilloDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #hermosilloFilter (keyup)="doHermosilloFilter(hermosilloFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="hermosilloDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="hermosilloDeployUnits != undefined">
+
+                            <div [ngClass]="
+                            unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                            unit.status == 'SA' ? 'card m-2' :
+                            unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'"
+                                *ngFor="let unit of hermosilloDeployUnits.filteredData" cdkDrag
+                                [cdkDragStartDelay]="200">
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                              <span>Disable alerts</span>
+                                                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+                                    
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="hermosilloDatePicker" #hermosilloDateValue >
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="hermosilloDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #hermosilloDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,hermosilloDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,hermosilloDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                </div>
+                            </div>
+
+                            <div *ngIf="!(hermosilloDeployUnits.filteredData.length > 0)" class="p-2">
+                                No hay unidades
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">La Paz</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="lapazDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{lapazDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #lapazFilter (keyup)="doLapazFilter(lapazFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="lapazDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="lapazDeployUnits != undefined">
+
+                            <div [ngClass]="
+                            unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                            unit.status == 'SA' ? 'card m-2' :
+                            unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'"
+                                *ngFor="let unit of lapazDeployUnits.filteredData" cdkDrag [cdkDragStartDelay]="200">
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                              <span>Disable alerts</span>
+                                                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+                                    
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="lapazDatePicker" #lapazDateValue >
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="lapazDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #lapazDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,lapazDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,lapazDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                </div>
+                            </div>
+
+                            <div *ngIf="!(lapazDeployUnits.filteredData.length > 0)" class="p-2">
+                                No hay unidades
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <div class="p-1">
+                        <div class="card p-2">
+                            <div class="lead" style="font-size: 30px;">Culiacan</div>
+                            <div class="d-flex flex-row-reverse" *ngIf="culiacanDeployUnits != undefined">
+                                <label class="lead">Total de registros: {{culiacanDeployUnits.filteredData.length}}</label>
+                            </div>
+                        </div>
+                        <div
+                            style="width: 100%; height:2px; background-color: #7db2e1; margin-bottom: 15px; margin-top: 15px;">
+                        </div>
+
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #culiacanFilter (keyup)="doCuliacanFilter(culiacanFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+
+                        <div class="m-2"></div>
+
+                        <div cdkDropList [cdkDropListData]="culiacanDeployUnits.filteredData" class="example-list"
+                            (cdkDropListDropped)="drop($event)" style="overflow-y: auto; max-height: 600px;"
+                            *ngIf="culiacanDeployUnits != undefined">
+
+                            <div [ngClass]="
+                            unit.status == 'D' ? 'card m-2 bg-success text-white' : 
+                            unit.status == 'SA' ? 'card m-2' :
+                            unit.status == 'SBY' ? 'card m-2 sby-card' : 'card m-2'"
+                                *ngFor="let unit of culiacanDeployUnits.filteredData" cdkDrag [cdkDragStartDelay]="200">
+
+
+
+                                <div class="card-body">
+                                    <div class="lead">Placa: {{unit.plate}}</div>
+                                    <br>
+                                    <div class="d-flex flex-row-reverse"
+                                        style="right: 10px;top: 10px; position:absolute;">
+                                        <!--<button mat-icon-button [matMenuTriggerFor]="monterreyMenus"
+                                            aria-label="Example icon-button with a menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #monterreyMenus="matMenu">
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MP')">
+                                                <mat-icon>build</mat-icon>
+                                                <span>Mantenimiento preventivo</span>
+                                            </button>
+                                            <button mat-menu-item (click)="moveTo(unit.plate,unit.headquarters,8,'MC')">
+                                                <mat-icon style="color: red;">build</mat-icon>
+                                                <span>Mantenimiento correctivo</span>
+                                            </button>
+                                            <button mat-menu-item>
+                                                                              <mat-icon>notifications_off</mat-icon>
+                                                                              <span>Disable alerts</span>
+                                                                            </button>
+                                        </mat-menu>-->
+                                    </div>
+                                    <p>
+                                        Clasificación: {{unit.type}}
+                                        <br>
+                                        ESTATUS: {{unit.status}}
+                                        <br>
+                                        Resp. Plaza: {{unit.headquarters_manager}}
+                                    </p>
+                                    
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                Registrar Mantenimiento
+                                            </mat-panel-title>
+                                            <mat-panel-description>
+                                                
+                                            </mat-panel-description>
+                                        </mat-expansion-panel-header>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Descripción</mat-label>
+                                            <input matInput #descInput maxlength="255">
+                                            <mat-icon matSuffix>short_text</mat-icon>
+                                        </mat-form-field>
+                                
+                                        <mat-form-field appearance="fill" class="w-100 text-dark">
+                                            <mat-label>Fecha aproximada de salida</mat-label>
+                                            <!--max="{{maxDatePicker}}"-->
+                                            <input matInput [matDatepicker]="culiacanDatePicker" #culiacanDateValue >
+                                            <mat-hint>MM/DD/YYYY</mat-hint>
+                                            <mat-datepicker-toggle matSuffix [for]="culiacanDatePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #culiacanDatePicker></mat-datepicker>
+                                        </mat-form-field>
+                                
+                                        <div class="d-flex flex-row-reverse">
+                                            <button class="w-50 btn mp-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MP',descInput.value,culiacanDateValue.value)">MP</button>
+                                            <button class="w-50 btn mc-card"
+                                                (click)="moveTo(unit.plate,unit.headquarters,8,'MC',descInput.value,culiacanDateValue.value)">MC</button>
+                                        </div>
+                                    </mat-expansion-panel>
+
+                                    
+                                </div>
+                            </div>
+
+                            <div *ngIf="!(culiacanDeployUnits.filteredData.length > 0)" class="p-2">
+                                No se encontraron unidades
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="En Operación" style="height: 800px;">
+            <div class="row p-2" style="margin-top: 15px;color: #7db2e1;">
+                <h1>Unidades en Operación</h1>
+            </div>
+            <div class="container-fluid">
+
+                <div class="d-flex flex-row-reverse p-2">
+                    <mat-form-field appearance="fill" class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                        <mat-label>Buscar unidad</mat-label>
+                        <input matInput #inOperationFilter (keyup)="doInOperationFilter(inOperationFilter.value)">
+                        <mat-icon matSuffix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="row" *ngIf="unitsInOperation != undefined">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" *ngFor="let unit of unitsInOperation.filteredData" [ngClass]="
+                        unit.status == 'OP' ? 'card m-2 op-card' : 
+                        unit.status == 'MP' ? 'card m-2 mp-card' :
+                        unit.status == 'MC' ? 'card m-2 mc-card' :
+                        unit.status == 'SBY' ? 'card m-2 sby-card' :
+                        unit.status == 'RI' ? 'card m-2 ri-card' : 'card m-2'">
+                            <div class="card-body">
+                                <h4 class="card-title">Placa: {{unit.plate}}</h4>
+                                <div class="d-flex flex-row-reverse" style="right: 10px;top: 10px; position:absolute;">
+                                    <button mat-icon-button [matMenuTriggerFor]="menuOperation">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menuOperation="matMenu">
+                                        <!--<button mat-menu-item (click)="moveTo(unit.plate,'MP')">
+                                            <mat-icon>build</mat-icon>
+                                            <span>Mantenimiento preventivo</span>
+                                        </button>
+                                        <button mat-menu-item (click)="moveTo(unit.plate,'MC')">
+                                            <mat-icon style="color: red;">build</mat-icon>
+                                            <span>Mantenimiento correctivo</span>
+                                        </button>-->
+                                    </mat-menu>
+                                </div>
+                                <p>
+                                    Clasificación: {{unit.type}}
+                                    <br>
+                                    ESTATUS: {{unit.status}}
+                                    <br>
+                                    Resp. Plaza: {{unit.headquarters_manager}}
+                                </p>
+                                <button href="#" class="btn btn-light" (click)="logPlate(unit.plate)">Review
+                                    Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </mat-tab>
+        <mat-tab label="Mantenimiento" style="height: 800px;">
+            <div class="row p-2" style="margin-top: 15px;color: #7db2e1;">
+                <h1>Unidades en Mantenimiento</h1>
+            </div>
+            <div class="container-fluid p-2">
+
+                <div class="row">
+                    <div class="d-flex flex-row-reverse">
+                        <mat-form-field appearance="fill" class="col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                            <mat-label>Buscar unidad</mat-label>
+                            <input matInput #inOperationFilter (keyup)="doInOperationFilter(inOperationFilter.value)">
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="unitsInMaintenance != undefined">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 p-2" *ngFor="let unit of unitsInMaintenance.filteredData"
+                    [ngClass]="
+                        unit.status == 'MP' ? 'card mp-card' :
+                        unit.status == 'MC' ? 'card mc-card' : 'card'">
+                        <div>
+                            <div class="card-body">
+                                <h4 class="card-title">Placa: {{unit.plate}}</h4>
+                                <div class="d-flex flex-row-reverse" style="right: 10px;top: 10px; position:absolute;">
+                                    <button mat-icon-button [matMenuTriggerFor]="menuOperation">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menuOperation="matMenu">
+                                        <!--<button mat-menu-item (click)="moveTo(unit.plate,'MP')">
+                                                                <mat-icon>build</mat-icon>
+                                                                <span>Mantenimiento preventivo</span>
+                                                            </button>
+                                                            <button mat-menu-item (click)="moveTo(unit.plate,'MC')">
+                                                                <mat-icon style="color: red;">build</mat-icon>
+                                                                <span>Mantenimiento correctivo</span>
+                                                            </button>-->
+                                    </mat-menu>
+                                </div>
+                                <p>
+                                    Clasificación: {{unit.type}}
+                                    <br>
+                                    ESTATUS: {{unit.status}}
+                                    <br>
+                                    Resp. Plaza: {{unit.headquarters_manager}}
+                                </p>
+                                <button href="#" class="btn btn-light" (click)="logPlate(unit.plate)">Review
+                                    Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        
+        </mat-tab>
+    </mat-tab-group>
+
+
+</div>
