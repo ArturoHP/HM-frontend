@@ -10,8 +10,8 @@ export class SamsaraService {
     constructor(private http: HttpClient) {
     }
 
-    //BACK_URL: any = 'http://localhost:3002';
-    BACK_URL: any = 'http://10.0.0.11:3002';
+    BACK_URL: any = 'http://localhost:3002';
+    //BACK_URL: any = 'http://10.0.0.11:3002';
 
     async getVehiclesLocationSnapshots() {
         return this.http.get<any>(`${this.BACK_URL}/api/samsara/get_vehicles_location_snapshots`)
